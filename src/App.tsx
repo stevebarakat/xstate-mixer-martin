@@ -2,13 +2,11 @@ import { Meter } from "tone";
 import "./App.css";
 import { defaultTrackData } from "./assets/songs/defaultData";
 import { roxanne } from "./assets/songs/roxanne";
-import { PlayPauseButton } from "./components/PlayPauseButton";
 import { Players } from "./components/Player";
 import { SongLoading } from "./components/SongLoading";
 import { SongSelector } from "./components/SongSelector";
-import { StopButton } from "./components/StopButton";
 import { MixerContext } from "./contexts/MixerContext";
-import React from "react";
+import Transport from "./components/Transport";
 
 const sourceSong = roxanne;
 
@@ -37,15 +35,13 @@ function App() {
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
+          gap: "16px",
         }}
       >
         <SongSelector />
         <SongLoading />
-        <div style={{ paddingTop: 24, display: "flex", gap: 8 }}>
-          <PlayPauseButton />
-          <StopButton />
-        </div>
         <Players />
+        <Transport song={sourceSong} />
       </div>
     </MixerContext.Provider>
   );
