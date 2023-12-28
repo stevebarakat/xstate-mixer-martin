@@ -1,28 +1,23 @@
 import { MixerContext } from "../contexts/MixerContext";
 
-export function Volume({ playerId }: { playerId: string }) {
+export function Volume({ playerId }: { playerId: number }) {
   const { send } = MixerContext.useActorRef();
   const volume = MixerContext.useSelector(
     // Volume object is mutated when changing volume
     // Select the current volume value for a warranted change detection
-    (state) => state.context.players?.player(playerId).volume.value ?? 0
+    (state) => state.context.players![playerId].volume.value ?? 0
   );
-  const mute = MixerContext.useSelector(
-    // Player object is mutated when toggling mute.
-    // We select the mute value for a warranted change detection
-    (state) => state.context.players?.player(playerId).mute ?? false
-  );
+  // const mute = MixerContext.useSelector(
+  //   // Player object is mutated when toggling mute.
+  //   // We select the mute value for a warranted change detection
+  //   (state) => state.context.players?.player(playerId).mute ?? false
+  // );
+  const state = MixerContext.useSelector((state) => state);
+  console.log("state.context.currentSong", state.context.currentSong);
   const name = MixerContext.useSelector(
-    (state) =>
-      state.context.currentSong?.tracks.find((track) => track.id === playerId)
-        ?.name
+    (state) => state.context.currentSong?.tracks[playerId].name
   );
-  const isVolumeDisabled = MixerContext.useSelector(
-    (state) => !state.nextEvents.includes("volume.set")
-  );
-  const isMuteDisabled = MixerContext.useSelector(
-    (state) => !state.nextEvents.includes("volume.mute")
-  );
+
   const inputId = `volume-${playerId}`;
 
   return (
@@ -49,7 +44,6 @@ export function Volume({ playerId }: { playerId: string }) {
           // Workaround is to use the value attribute instead,
           // but you have to handle the incoming -Infinity value when muting the song.
           defaultValue={volume.toFixed()}
-          disabled={isVolumeDisabled}
           min={-50}
           max={0}
           type="range"
@@ -59,11 +53,8 @@ export function Volume({ playerId }: { playerId: string }) {
           }}
         />
       </div>
-      <button
-        disabled={isMuteDisabled}
-        onClick={() => send({ type: "volume.mute", playerId })}
-      >
-        {mute ? "Muted" : "Mute"}
+      <button onClick={() => send({ type: "volume.mute", playerId })}>
+        {true ? "Muted" : "Mute"}
       </button>
     </div>
   );

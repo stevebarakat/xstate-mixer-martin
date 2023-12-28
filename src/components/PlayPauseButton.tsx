@@ -1,10 +1,9 @@
 import { MixerContext } from "../contexts/MixerContext";
 
 export function PlayPauseButton() {
-  const isPlaying = MixerContext.useSelector((state) =>
-    // Can also check for `state.matches({ song: { loaded: "playing" } })`,
-    // but this method is more stable with state hierarchy changes
-    state.hasTag("playing")
+  const canPause = MixerContext.useSelector((state) =>
+    // Dirty hack which to determine which button to display
+    state.can({ type: "song.pause" })
   );
   const disabled = MixerContext.useSelector(
     (state) => !state.can({ type: "song.playPause" })
@@ -16,7 +15,7 @@ export function PlayPauseButton() {
       onClick={() => send({ type: "song.playPause" })}
       disabled={disabled}
     >
-      {isPlaying ? "Pause" : "Play"}
+      {canPause ? "Pause" : "Play"}
     </button>
   );
 }
