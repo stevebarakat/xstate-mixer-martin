@@ -11,7 +11,7 @@ export function Players() {
   return (
     <div style={{ display: "flex", gap: 16 }}>
       {tracks.map((track, trackId) => (
-        <Volume key={track.id} playerId={trackId} />
+        <Volume key={track.id} trackId={trackId} />
       ))}
     </div>
   );

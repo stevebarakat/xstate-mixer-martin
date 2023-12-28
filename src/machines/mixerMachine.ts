@@ -1,11 +1,11 @@
 import invariant from "tiny-invariant";
-import { Player, loaded, start, Transport as t } from "tone";
+import { Channel, Player, loaded, start, Transport as t } from "tone";
 import { assign, createMachine, fromCallback, fromPromise } from "xstate";
 import { Song } from "../types/songs";
 
 type MixerContext = {
   currentSong?: Song;
-  players?: Player[];
+  channels?: Channel[];
 };
 
 export const mixerMachine = createMachine(
@@ -13,7 +13,7 @@ export const mixerMachine = createMachine(
     id: "mixerMachine",
     context: {
       currentSong: undefined,
-      players: [],
+      channels: [],
     },
     type: "parallel",
     states: {
@@ -138,16 +138,17 @@ export const mixerMachine = createMachine(
         const song = context.currentSong;
         invariant(song, "Current song should be known");
         let players: Player[] = [];
-        song.tracks.forEach((track) => {
-          players = [
-            new Player(track.path).toDestination().sync().start(),
-            ...players,
-          ];
+        let channels: Channel[] = [];
+        song.tracks.map((track, i) => {
+          channels = [new Channel().toDestination(), ...channels];
+          return (players = [...players, new Player(track.path)]);
         });
-
+        players?.map(
+          (player, i) => channels && player.connect(channels[i]).sync().start(0)
+        );
         return {
           currentSong: event.song,
-          players,
+          channels,
         };
       }),
       stopSong: () => t.stop(),
@@ -159,18 +160,18 @@ export const mixerMachine = createMachine(
         };
       }),
       disposePlayers: assign(({ context }) => {
-        context.players?.forEach((player) => player.dispose());
+        context.channels?.forEach((channel) => channel.dispose());
         return {
-          players: undefined,
+          channels: undefined,
         };
       }),
       setPlayerVolume: ({ context, event }) => {
-        const player = context.players?.player(event.playerId);
-        if (player) player.volume.value = event.value;
+        const channel = context.channels[event.trackId];
+        if (channel) channel.volume.value = event.value;
       },
       togglePlayerMute: ({ context, event }) => {
-        const player = context.players?.player(event.playerId);
-        if (player) player.mute = !player.mute;
+        const channel = context.channels[event.trackId];
+        if (channel) channel.mute = !channel.mute;
       },
     },
     actors: {

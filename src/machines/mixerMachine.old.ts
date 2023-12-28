@@ -111,8 +111,8 @@ export const mixerMachine = createMachine(
         const players = new Tone.Players().toDestination();
         song.tracks.forEach((track) => {
           players.add(track.id, track.path);
-          players.player(track.id).sync().start(song.start);
-          players.player(track.id).volume.value = track.volume;
+          players.channel(track.id).sync().start(song.start);
+          players.channel(track.id).volume.value = track.volume;
         });
 
         return {
@@ -135,12 +135,12 @@ export const mixerMachine = createMachine(
         };
       }),
       setPlayerVolume: ({ context, event }) => {
-        const player = context.players?.player(event.playerId);
-        if (player) player.volume.value = event.value;
+        const channel = context.players?.channel(event.trackId);
+        if (channel) channel.volume.value = event.value;
       },
       togglePlayerMute: ({ context, event }) => {
-        const player = context.players?.player(event.playerId);
-        if (player) player.mute = !player.mute;
+        const channel = context.players?.channel(event.trackId);
+        if (channel) channel.mute = !channel.mute;
       },
     },
     actors: {
