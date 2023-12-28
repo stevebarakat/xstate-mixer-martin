@@ -101,6 +101,11 @@ export const mixerMachine = createMachine(
                   type: "setPlayerVolume",
                 },
               },
+              "volume.solo": {
+                actions: {
+                  type: "togglePlayerSolo",
+                },
+              },
               "volume.mute": {
                 actions: {
                   type: "togglePlayerMute",
@@ -129,6 +134,7 @@ export const mixerMachine = createMachine(
         | { type: "song.stop" }
         | { type: "volume.set" }
         | { type: "volume.mute" }
+        | { type: "volume.solo" }
         | { type: "song.load" },
     },
   },
@@ -172,6 +178,10 @@ export const mixerMachine = createMachine(
       togglePlayerMute: ({ context, event }) => {
         const channel = context.channels[event.trackId];
         if (channel) channel.mute = !channel.mute;
+      },
+      togglePlayerSolo: ({ context, event }) => {
+        const channel = context.channels[event.trackId];
+        if (channel) channel.solo = !channel.solo;
       },
     },
     actors: {

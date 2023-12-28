@@ -8,6 +8,7 @@ import { SongLoading } from "./components/SongLoading";
 import { SongSelector } from "./components/SongSelector";
 import { StopButton } from "./components/StopButton";
 import { MixerContext } from "./contexts/MixerContext";
+import React from "react";
 
 const sourceSong = roxanne;
 

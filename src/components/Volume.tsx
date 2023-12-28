@@ -1,3 +1,4 @@
+import React from "react";
 import { MixerContext } from "../contexts/MixerContext";
 import { Toggle } from "./Buttons";
 
