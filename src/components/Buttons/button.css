@@ -47,7 +47,6 @@
   display: flex;
   justify-content: space-between;
   padding-bottom: 8px;
-  gap: 1rem;
 }
 
 .solo-mute label {

@@ -1,5 +1,5 @@
+import React from "react";
 import { MixerContext } from "../contexts/MixerContext";
-import Fader from "./Fader";
 import { Toggle } from "./Buttons";
 
 export function Volume({ trackId }: { trackId: number }) {
@@ -10,9 +10,12 @@ export function Volume({ trackId }: { trackId: number }) {
     (state) => state.context.channels![trackId].volume.value ?? 0
   );
   const state = MixerContext.useSelector((state) => state);
-  const currentSong = state.context.currentSong;
 
-  const name = currentSong?.tracks[trackId].name;
+  const name = MixerContext.useSelector(
+    (state) => state.context.currentSong?.tracks[trackId].name
+  );
+
+  const inputId = `volume-${trackId}`;
 
   return (
     <div
@@ -29,15 +32,10 @@ export function Volume({ trackId }: { trackId: number }) {
             flexDirection: "column",
           }}
         >
-          <label
-            htmlFor={trackId.toString()}
-            style={{ alignSelf: "flex-start" }}
-          >
-            Volume
-          </label>
-          <Fader trackId={trackId} />
+          <label htmlFor={inputId}>Volume</label>
           <input
-            id={trackId.toString()}
+            id={inputId}
+            className="range-y"
             // Careful with this, changing the channel value elsewhere won't be reflected here.
             // Workaround is to use the value attribute instead,
             // but you have to handle the incoming -Infinity value when muting the song.
@@ -53,13 +51,13 @@ export function Volume({ trackId }: { trackId: number }) {
         </div>
         <div className="solo-mute">
           <Toggle
-            id={`trackSolo${currentSong?.tracks[trackId].id}`}
+            id={`trackSolo${state.context.currentSong?.tracks[trackId].id}`}
             onChange={() => send({ type: "volume.solo", trackId })}
           >
             S
           </Toggle>
           <Toggle
-            id={`trackMute${currentSong?.tracks[trackId].id}`}
+            id={`trackMute${state.context.currentSong?.tracks[trackId].id}`}
             onChange={() => send({ type: "volume.mute", trackId })}
           >
             M

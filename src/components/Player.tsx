@@ -10,7 +10,7 @@ export function Players() {
   if (!tracks) return null;
 
   return (
-    <div style={{ display: "flex", gap: 16 }}>
+    <div className="channels">
       {tracks.map((track, trackId) => (
         <Volume key={track.id} trackId={trackId} />
       ))}

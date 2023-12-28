@@ -210,7 +210,7 @@ body {
   background: ivory;
   padding: 20px;
   align-items: center;
-  max-width: 120px;
+  max-width: 50px;
   border-radius: 8px;
   height: 100%;
   overflow: hidden;
@@ -219,7 +219,7 @@ body {
   text-align: center;
 }
 
-.channels > div:last-of-type {
+/* .channels > div:last-of-type {
   margin-left: 4px;
   border: 5px solid var(--primary-color-8);
   border-radius: 13.5px;
@@ -227,7 +227,7 @@ body {
 
 .channels > div:last-of-type input[type="range"] {
   height: 100%;
-}
+} */
 
 .channel-label {
   color: var(--primary-color);
@@ -251,15 +251,15 @@ body {
 }
 
 .range-y {
-  appearance: none;
-  background: none;
+  /* appearance: none; */
+  /* background: none; */
   rotate: 270deg;
   display: flex;
   flex-direction: column;
-  top: 92px;
-  width: 156px;
+  /* top: 92px; */
+  /* width: 156px; */
   height: 160px;
-  position: relative;
+  /* position: relative; */
 }
 
 .volume::-webkit-slider-runnable-track {

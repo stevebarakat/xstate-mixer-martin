@@ -21,7 +21,7 @@ function Fader({ trackId }: { trackId: number }) {
           // Careful with this, changing the channel value elsewhere won't be reflected here.
           // Workaround is to use the value attribute instead,
           // but you have to handle the incoming -Infinity value when muting the song.
-          defaultValue={volume.toFixed()}
+          value={volume.toFixed()}
           onChange={(event) => {
             const value = Number.parseInt(event.target.value);
             send({ type: "volume.set", trackId, value });

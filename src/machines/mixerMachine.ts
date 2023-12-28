@@ -96,6 +96,16 @@ export const mixerMachine = createMachine(
                   type: "stopSong",
                 },
               },
+              fastFwd: {
+                actions: {
+                  type: "fastFwd",
+                },
+              },
+              rewind: {
+                actions: {
+                  type: "rewind",
+                },
+              },
               "volume.set": {
                 actions: {
                   type: "setPlayerVolume",
@@ -160,6 +170,12 @@ export const mixerMachine = createMachine(
       stopSong: () => t.stop(),
       playSong: () => t.start(),
       pauseSong: () => t.pause(),
+      fastFwd: () => {
+        t.seconds = t.seconds + 10;
+      },
+      rewind: () => {
+        t.seconds = t.seconds - 10;
+      },
       assignCurrentSong: assign(({ event }) => {
         return {
           currentSong: event.song,
