@@ -1,10 +1,31 @@
+import { Meter } from "tone";
 import "./App.css";
+import { defaultTrackData } from "./assets/songs/defaultData";
+import { roxanne } from "./assets/songs/roxanne";
 import { PlayPauseButton } from "./components/PlayPauseButton";
 import { Players } from "./components/Player";
 import { SongLoading } from "./components/SongLoading";
 import { SongSelector } from "./components/SongSelector";
 import { StopButton } from "./components/StopButton";
 import { MixerContext } from "./contexts/MixerContext";
+
+const sourceSong = roxanne;
+
+const currentMain = {
+  volume: -32,
+  meter: new Meter(),
+  meterVals: new Float32Array(),
+};
+
+const currentTracks = sourceSong.tracks.map((track) => ({
+  ...track,
+  ...defaultTrackData,
+  sourceSongSlug: sourceSong.slug,
+}));
+
+const initialContext = { sourceSong, currentMain, currentTracks };
+export type InitialContext = typeof initialContext;
+export type TrackSettings = typeof currentTracks;
 
 function App() {
   // TODO: Set current song in options from local storage data

@@ -1,5 +1,6 @@
 import { songs } from "../assets/songs";
 import { MixerContext } from "../contexts/MixerContext";
+import { v4 as uuid } from "uuid";
 
 export function SongSelector() {
   const value = MixerContext.useSelector(
@@ -18,7 +19,7 @@ export function SongSelector() {
         Choose a song :
       </option>
       {songs.map((song) => (
-        <option key={song.slug} value={song.slug}>
+        <option key={uuid()} value={song.slug}>
           {song.artist} - {song.title}
         </option>
       ))}

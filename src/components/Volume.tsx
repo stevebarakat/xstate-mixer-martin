@@ -1,4 +1,5 @@
 import { MixerContext } from "../contexts/MixerContext";
+import { Toggle } from "./Buttons";
 
 export function Volume({ trackId }: { trackId: number }) {
   const { send } = MixerContext.useActorRef();
@@ -7,13 +8,8 @@ export function Volume({ trackId }: { trackId: number }) {
     // Select the current volume value for a warranted change detection
     (state) => state.context.channels![trackId].volume.value ?? 0
   );
-  const mute = MixerContext.useSelector(
-    // Player object is mutated when toggling mute.
-    // We select the mute value for a warranted change detection
-    (state) => state.context.channels![trackId].muted ?? false
-  );
   const state = MixerContext.useSelector((state) => state);
-  console.log("state.context.currentSong", state.context.currentSong);
+
   const name = MixerContext.useSelector(
     (state) => state.context.currentSong?.tracks[trackId].name
   );
@@ -28,7 +24,6 @@ export function Volume({ trackId }: { trackId: number }) {
         gap: 8,
       }}
     >
-      <h2>{name}</h2>
       <div
         style={{
           display: "flex",
@@ -53,9 +48,23 @@ export function Volume({ trackId }: { trackId: number }) {
           }}
         />
       </div>
-      <button onClick={() => send({ type: "volume.mute", trackId })}>
-        {mute ? "Muted" : "Mute"}
-      </button>
+      <div className="channel">
+        <div className="solo-mute">
+          <Toggle
+            id={`trackSolo${state.context.currentSong?.tracks[trackId].id}`}
+            onChange={() => send({ type: "volume.solo", trackId })}
+          >
+            S
+          </Toggle>
+          <Toggle
+            id={`trackMute${state.context.currentSong?.tracks[trackId].id}`}
+            onChange={() => send({ type: "volume.mute", trackId })}
+          >
+            M
+          </Toggle>
+        </div>
+        <span>{name}</span>
+      </div>
     </div>
   );
 }
